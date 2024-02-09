@@ -1,6 +1,6 @@
 @font-face {
     font-family: 'bebas';
-    src: url("../BebasNeue-Regular.ttf") format('truetype');
+    src: url("../Righteous-Regular.ttf") format('truetype');
 }
 
 * {
@@ -20,6 +20,11 @@ html, body{
     overflow-x: hidden;
 }
 
+.home-canvas{
+    background: linear-gradient(120deg, #171f1f, black);
+    position: relative;
+}
+
 footer{
     display: flex;
     bottom: 0;
@@ -31,11 +36,11 @@ footer{
     height: 7vh;
     justify-content: center;
     align-items: center;
-    background-color: rgba(256,256,256, 0.3);
 }
 
 footer p{
     font-size: 1.5rem;
+    color: #1A727C;
 }
 
 .navbar{
@@ -51,22 +56,15 @@ footer p{
     justify-content: space-between;
 }
 
-.navbar::before{
-    content: '';
-    position: absolute;
-    background-color: rgba(256,256,256, 0.3);
-    backdrop-filter: blur(10px);
-    width: 100%;
-    height: 100%;
-}
 
 .logo{
-    position: absolute;
+    position: relative;
     top: 0;
     left: 0;
-    padding: 2.2vh 0 0 1rem;
+    padding-left: 1rem;
     font-size: 2.3rem;
     font-weight: 800;
+    color: #1A727C;
 }
 
 .navbar-ul{
@@ -81,15 +79,6 @@ footer p{
     transition: ease 0.5s;
 }
 
-.navbar-ul::before{
-    content: '';
-    position: absolute;
-    background-color: rgba(256,256,256, 0.3);
-    backdrop-filter: blur(10px);
-    width: 100%;
-    height: 100%;
-    z-index:-1;
-}
 
 .navbar-ul a{
     text-decoration: none;
@@ -99,36 +88,40 @@ footer p{
 
 .burger-menu{
     display: none;
-    position:absolute;
+    position:relative;
     top: 0;
     right: 0;
-    padding: 2.5vh 2rem 0 0;
+    padding-right: 1rem;
 }
 
 .burger-menu div{
     width: 2rem;
-    height: 0.3rem;
-    margin: 0.3rem;
-    background-color: #B1B1B1;
+    height: 0.2rem;
+    margin: 0.15rem;
+    background-color: #1A727C;
     opacity: 1;
     transition: ease 0.5s;
 }
 
 .burger-menu .line2{
-    margin-bottom: 0.35rem;
+    width: 65%;
 }
 
 @media screen and (max-width: 800px) {
 
     .burger-menu{
-        display: block;
+        display: flex;
+        flex-wrap: wrap;
+        flex-direction: column;
+        align-items: flex-end;
     }
 
     .burger-menu-active .line1{
-        transform: translateY(0.7rem) rotateZ(-45deg);
+        transform: translateY(0.4rem) rotateZ(-45deg);
     }
     
     .burger-menu-active .line2{
+        transform: translateX(-0.5rem);
         opacity: 0;
     }
     
@@ -148,13 +141,18 @@ footer p{
         height: 18rem;
     }
 
+    .navbar:has(> .navbar-ul-active){
+        position: fixed;
+    }
+
     .home-content{
-        position:relative;
+        position:absolute;
         text-align: center;
         font-size: 1rem;
         padding: 1rem;
         top: 15vh;
         margin-bottom: -2.7rem;
+        z-index: 3;
     }
 
     .overview-text{
@@ -169,15 +167,16 @@ footer p{
     .explore-button{
         display: flex;
         position: absolute;
-        top: 75%;
-        left: 50%;
-        width: 50%;
-        transform: translateX(-50%) translateY(75%);
-        background-color: rgba(256,256,256, 0.3);
+        background-color: rgba(26, 114, 124, 0.3);
         border: none;
         color: #B1B1B1;
-        font-size: 2rem;
+        font-size: 2.5rem;
+        z-index: 3;
+        top: 80%;
+        left: 50%;
+        transform: translateX(-50%);
         justify-content: center;
-        border-radius: 5px;
+        padding: 0.5rem 1.5rem;
+        border-radius: 3rem;
     }
 }

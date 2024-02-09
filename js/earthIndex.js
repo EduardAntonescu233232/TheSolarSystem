@@ -4,23 +4,76 @@ import gsap from 'gsap';
 import earthTexture from "../earth-texture.jpg";
 import earthClouds from "../earth-clouds.jpg";
 import moonTexture from "../moon-texture.jpg";
+import starTexture from "../circle.png";
 // Scene
 const scene = new THREE.Scene();
+const textureLoader = new THREE.TextureLoader();
 const earthSizes = {
     width : window.innerWidth,
-    height: window.innerHeight
+    height: (window.innerHeight + 300)
 };
-const camera = new THREE.PerspectiveCamera(65, earthSizes.width/earthSizes.height, 0.1, 100);
+const camera = new THREE.PerspectiveCamera(65, earthSizes.width/earthSizes.height, 0.1, 1000);
 const canvas = document.querySelector(".home-canvas");
-const renderer = new THREE.WebGLRenderer({canvas, antialias: true});
+const renderer = new THREE.WebGLRenderer({canvas, antialias: true, alha: true});
+renderer.setClearColor(0x000000, 0);
 renderer.setSize(earthSizes.width, earthSizes.height);
 renderer.setPixelRatio(window.devicePixelRatio);
 document.body.appendChild(renderer.domElement);
 
+
+//Starry background
+function getStarField({numStars = 500} = {}){
+
+
+function randomSpherePoint(){
+    const radius = Math.random() * 25 + 25;
+    const u = Math.random();
+    const v = Math.random();
+    const theta = 2 * Math.PI * u;
+    const phi = Math.acos(2 * v - 1);
+    let x = radius * Math.sin(phi) * Math.cos(theta);
+    let y = radius * Math.sin(phi) * Math.sin(theta);
+    let z = radius * Math.cos(phi);
+
+    return{
+        pos: new THREE.Vector3(x,y,z),
+        hue: 0.6,
+        minDist: radius,
+    };
+}
+
+const verts = [];
+const colors = [];
+const positions = [];
+let col;
+for(let i = 0; i< numStars; i+=1){
+    let p = randomSpherePoint();
+    const{pos, hue} = p;
+    positions.push(p);
+    col = new THREE.Color().setHSL(hue, 0.2, Math.random());
+    verts.push(pos.x, pos.y, pos.z);
+    colors.push(col.r, col.g, col.b);
+}
+
+const geo = new THREE.BufferGeometry();
+geo.setAttribute("position", new THREE.Float32BufferAttribute(verts, 3));
+geo.setAttribute("color", new THREE.Float32BufferAttribute(colors, 3));
+const mat = new THREE.PointsMaterial({
+    size: 0.2,
+    vertexColors: true,
+    map: textureLoader.load(starTexture),
+});
+const points = new THREE.Points(geo, mat);
+return points;
+}
+
+const stars = getStarField({numStars: 2000});
+scene.add(stars);
+
+
 //Earth geometry
 const earthGroup = new THREE.Group();
 const earthGeometry = new THREE.SphereGeometry(8, 64, 64);
-const textureLoader = new THREE.TextureLoader();
 const earthMaterial = new THREE.MeshPhongMaterial({
     map: textureLoader.load(earthTexture),
 });
@@ -55,7 +108,7 @@ moonMesh.position.z += 2;
 
 //Light
 const directionalLight = new THREE.DirectionalLight(0xcccccc);
-directionalLight.position.set(-0.8,1,0.2).normalize();
+directionalLight.position.set(-0.6,1,0.2).normalize();
 directionalLight.intensity = 1.4;
 scene.add(directionalLight);
 
@@ -79,10 +132,10 @@ function animate(){
 }
 
 if(window.innerWidth < 700){
-    camera.position.set(0, 0, 50);
+    camera.position.set(0, 4, 50);
 }
 else{
-    camera.position.set(0, 0, 15);
+    camera.position.set(0, 0, 25);
 }
 animate();
 
@@ -91,13 +144,13 @@ animate();
 
 window.addEventListener("resize", ()=> {
     earthSizes.width = window.innerWidth;
-    earthSizes.height = window.innerHeight;
+    earthSizes.height = window.innerHeight + 300;
     camera.aspect = earthSizes.width/earthSizes.height;
     if(window.innerWidth < 700){
-        camera.position.set(0, 0, 50);
+        camera.position.set(0, 4, 50);
     }
     else{
-        camera.position.set(0, 0, 15);
+        camera.position.set(0, 0, 25);
     }
     camera.updateProjectionMatrix();
     renderer.setSize(earthSizes.width, earthSizes.height);
