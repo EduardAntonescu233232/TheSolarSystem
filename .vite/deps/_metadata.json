@@ -1,0 +1,21 @@
+{
+  "hash": "a9e52dc3",
+  "configHash": "661e66c9",
+  "lockfileHash": "a2bb1471",
+  "browserHash": "a065b6eb",
+  "optimized": {
+    "three": {
+      "src": "../../node_modules/three/build/three.module.js",
+      "file": "three.js",
+      "fileHash": "a9b0b1f9",
+      "needsInterop": false
+    },
+    "gsap": {
+      "src": "../../node_modules/gsap/index.js",
+      "file": "gsap.js",
+      "fileHash": "829fca36",
+      "needsInterop": false
+    }
+  },
+  "chunks": {}
+}
