@@ -14,6 +14,7 @@ const camera = new THREE.PerspectiveCamera(65, earthSizes.width/earthSizes.heigh
 const canvas = document.querySelector(".home-canvas");
 const renderer = new THREE.WebGLRenderer({canvas, antialias: true});
 renderer.setSize(earthSizes.width, earthSizes.height);
+renderer.setPixelRatio(window.devicePixelRatio);
 document.body.appendChild(renderer.domElement);
 
 //Earth geometry
