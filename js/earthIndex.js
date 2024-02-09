@@ -1,7 +1,9 @@
 import * as THREE from 'three';
 import "/css/stylesheet.css";
 import gsap from 'gsap';
-import earthTexture from ("./earth-texture.jpg");
+import earthTexture from "../earth-texture.jpg";
+import earthClouds from "../earth-clouds.jpg";
+import moonTexture from "../moon-texture.jpg";
 // Scene
 const scene = new THREE.Scene();
 const earthSizes = {
@@ -24,7 +26,7 @@ const earthMaterial = new THREE.MeshPhongMaterial({
 const earthMesh = new THREE.Mesh(earthGeometry, earthMaterial);
 
 const cloudsEarthMaterial = new THREE.MeshStandardMaterial({
-    map: textureLoader.load('./earth-clouds.jpg'),
+    map: textureLoader.load(earthClouds),
     blending: THREE.AdditiveBlending,
     opacity: 0.7,
 })
@@ -41,7 +43,7 @@ scene.add(earthGroup);
 //Moon Geometry
 const moonGeometry = new THREE.SphereGeometry(2, 32, 32);
 const moonMaterial = new THREE.MeshPhongMaterial({
-    map: textureLoader.load('./moon-texture.jpg'),
+    map: textureLoader.load(moonTexture),
 });
 
 const moonMesh = new THREE.Mesh(moonGeometry, moonMaterial);
