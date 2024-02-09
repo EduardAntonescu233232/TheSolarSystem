@@ -5,9 +5,9 @@ import earthTexture from "../earth-texture.jpg";
 import earthClouds from "../earth-clouds.jpg";
 import moonTexture from "../moon-texture.jpg";
 import starTexture from "../circle.png";
+import {textureLoader} from './loadingscreen.js';
 // Scene
 const scene = new THREE.Scene();
-const textureLoader = new THREE.TextureLoader();
 const earthSizes = {
     width : window.innerWidth,
     height: (window.innerHeight + 300)
@@ -34,6 +34,11 @@ function randomSpherePoint(){
     let x = radius * Math.sin(phi) * Math.cos(theta);
     let y = radius * Math.sin(phi) * Math.sin(theta);
     let z = radius * Math.cos(phi);
+
+    const zLimit = -10;
+    if(z > zLimit){
+        z = zLimit - Math.random() * 5;
+    }
 
     return{
         pos: new THREE.Vector3(x,y,z),
@@ -105,6 +110,7 @@ scene.add(moonMesh);
 
 moonMesh.position.x += 2;
 moonMesh.position.z += 2;
+moonMesh.rotation.y += 4;
 
 //Light
 const directionalLight = new THREE.DirectionalLight(0xcccccc);
@@ -122,7 +128,7 @@ let moonAngle = 0;
 function animate(){
     requestAnimationFrame(animate);
     earthGroup.rotation.y += 0.0003;
-    cloudsMesh.rotation.y += 0.0004;
+    cloudsMesh.rotation.y += 0.0004; 
 
     moonAngle += moonOrbitSpeed;
     moonMesh.position.x = earthGroup.position.x + moonOrbitRadius * Math.cos(moonAngle);
@@ -143,9 +149,6 @@ animate();
 //Resizing
 
 window.addEventListener("resize", ()=> {
-    earthSizes.width = window.innerWidth;
-    earthSizes.height = window.innerHeight + 300;
-    camera.aspect = earthSizes.width/earthSizes.height;
     if(window.innerWidth < 700){
         camera.position.set(0, 4, 50);
     }
