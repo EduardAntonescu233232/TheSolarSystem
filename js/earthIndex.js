@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import "/css/stylesheet.css";
 import gsap from 'gsap';
+import earthTexture from ("./earth-texture.jpg");
 // Scene
 const scene = new THREE.Scene();
 const earthSizes = {
@@ -18,7 +19,7 @@ const earthGroup = new THREE.Group();
 const earthGeometry = new THREE.SphereGeometry(8, 64, 64);
 const textureLoader = new THREE.TextureLoader();
 const earthMaterial = new THREE.MeshPhongMaterial({
-    map: textureLoader.load('./earth-texture.jpg'),
+    map: textureLoader.load(earthTexture),
 });
 const earthMesh = new THREE.Mesh(earthGeometry, earthMaterial);
 
