@@ -15,6 +15,7 @@ html, body{
     position: relative;
     flex-direction: column;
     justify-content: center;
+    align-items: center;
     background-color: black;
     color: #B1B1B1;
     overflow-x: hidden;
@@ -60,15 +61,16 @@ footer p{
 
 .navbar{
     display: flex;
-    top: 0;
-    left:0;
-    flex-wrap: wrap;
-    position: absolute;
-    z-index: 999;
-    width: 100%;
-    height: 10vh;
     align-items: center;
     justify-content: space-between;
+    width: 100%;
+    height: 10vh;
+    position: absolute;
+    z-index: 999;
+    top: 0;
+    left: 0;
+    padding: 3rem;
+    font-size: 2.5rem;
 }
 
 
@@ -77,25 +79,11 @@ footer p{
     top: 0;
     left: 0;
     padding-left: 1rem;
-    font-size: 2rem;
+    font-size: 3rem;
     font-weight: 800;
     color: #1A727C;
 }
 
-.navbar-ul{
-    display: flex;
-    position:absolute;
-    right: 0;
-    flex-direction: column;
-    width: 0;
-    height: 100%;
-    z-index: 999;
-    align-items: center;
-    font-size: 2rem;
-    transition: ease 0.5s;
-    background-color: white;
-    justify-content: center;
-}
 
 
 .navbar-ul a{
@@ -126,13 +114,53 @@ footer p{
     width: 65%;
 }
 
-@media screen and (max-width: 800px) {
+.home-content{
+    position:absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    font-size: 2rem;
+    width: 75%;
+    top: 15vh;
+    z-index: 3;
+}
+
+.overview-text{
+    margin-top: 2rem;
+}
+
+.home-description{
+    position: absolute;
+    bottom: 0;
+}
+
+.explore-button{
+    background: linear-gradient(120deg, #243838, black);
+    border: 0.3rem solid #B1B1B1;
+    color: #B1B1B1;
+    font-size: 2.5rem;
+    z-index: 3;
+    padding: 0.5rem 1.5rem;
+    margin-top: 1rem;
+    border-radius: 3rem;
+    cursor: pointer;
+    transition: ease 0.3s;
+}
+
+.explore-button:hover{
+    background: linear-gradient(120deg, black, #243838);
+    transition: ease 0.3s;
+}
+
+@media screen and (max-width: 1200px) {
 
     .burger-menu{
         display: flex;
         flex-wrap: wrap;
         flex-direction: column;
         align-items: flex-end;
+        padding-right: 0.5rem;
     }
 
     .burger-menu-active .line1{
@@ -148,7 +176,35 @@ footer p{
         transform: translateY(-0.55rem) rotateZ(45deg);
     }
 
+    .logo{
+        position: relative;
+        top: 0;
+        left: 0;
+        padding-left: 0.5rem;
+        font-size: 1.5rem;
+        font-weight: 800;
+        color: #1A727C;
+    }
+
+    .navbar{
+        display: flex;
+        top: 0;
+        left:0;
+        flex-wrap: wrap;
+        position: absolute;
+        z-index: 999;
+        width: 100%;
+        height: 10vh;
+        padding: 1.5rem;
+        align-items: center;
+        justify-content: space-between;
+    }
+
     .navbar-ul{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
         position: absolute;
         top: 0;
         right: -100%;
@@ -157,6 +213,7 @@ footer p{
         overflow: hidden;
         background: linear-gradient(120deg, #243838, black);
         z-index: 2;
+        transition: ease 0.5s;
     }
 
     .navbar-ul-active{
@@ -164,6 +221,7 @@ footer p{
         justify-content: center;
         z-index: 2;
         right: 0;
+        align-items: center;
     }
 
     .navbar-ul-active a{
@@ -192,18 +250,18 @@ footer p{
     }
 
     .explore-button{
-        display: flex;
-        position: absolute;
         background: linear-gradient(120deg, #243838, black);
         border: 0.3rem solid #B1B1B1;
         color: #B1B1B1;
         font-size: 2rem;
         z-index: 3;
-        top: 80%;
-        left: 50%;
-        transform: translateX(-50%);
-        justify-content: center;
-        padding: 0.5rem 1.5rem;
+        padding: 0.2rem 1rem;
         border-radius: 3rem;
+    }
+}
+
+@media screen and (min-width: 1600px) {
+    .home-content{
+        width: 65%;
     }
 }

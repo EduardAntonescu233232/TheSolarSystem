@@ -137,11 +137,12 @@ function animate(){
     renderer.render(scene, camera); 
 }
 
-if(window.innerWidth < 700){
-    camera.position.set(0, 4, 50);
+if(window.innerWidth < 1200){
+    camera.position.set(0, 4.5, 50);
 }
 else{
-    camera.position.set(0, 0, 25);
+    camera.position.set(0, 6, 30);
+    camera.fov = 50;
 }
 animate();
 
@@ -149,11 +150,11 @@ animate();
 //Resizing
 
 window.addEventListener("resize", ()=> {
-    if(window.innerWidth < 700){
-        camera.position.set(0, 4, 50);
+    if(window.innerWidth < 1200){
+        camera.position.set(0, 4.5, 50);
     }
     else{
-        camera.position.set(0, 0, 25);
+        camera.position.set(0, 6, 30);
     }
     camera.updateProjectionMatrix();
     renderer.setSize(earthSizes.width, earthSizes.height);
@@ -170,3 +171,4 @@ cloudsMesh.material.transparent = true;
 
 tl.fromTo([earthGroup.position, cloudsMesh.position], {z: 0, x: 0, y: -15}, {z: 0, x: 0, y: 0})
   .fromTo('.home-content', {x: "-100%"}, {x: "0%"}, "<");
+  
