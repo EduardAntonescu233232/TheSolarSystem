@@ -1,19 +1,19 @@
 {
-  "hash": "a9e52dc3",
-  "configHash": "661e66c9",
+  "hash": "535655aa",
+  "configHash": "088d83db",
   "lockfileHash": "a2bb1471",
-  "browserHash": "a065b6eb",
+  "browserHash": "6f56f2e5",
   "optimized": {
     "three": {
       "src": "../../node_modules/three/build/three.module.js",
       "file": "three.js",
-      "fileHash": "a9b0b1f9",
+      "fileHash": "91f0b9c2",
       "needsInterop": false
     },
     "gsap": {
       "src": "../../node_modules/gsap/index.js",
       "file": "gsap.js",
-      "fileHash": "829fca36",
+      "fileHash": "31ad2b5b",
       "needsInterop": false
     }
   },

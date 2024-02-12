@@ -7,10 +7,6 @@ const navigation = () => {
         menu.classList.toggle('navbar-ul-active');
     });
 
-    const explore = document.querySelector('.explore-button');
-    explore.addEventListener('click', ()=> {
-       window.location.href = "SolarSystem.html";
-    });
 }
 
 navigation();
