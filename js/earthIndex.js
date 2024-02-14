@@ -9,6 +9,10 @@ import sunTexture from "../sun-texture.jpg";
 import {textureLoader} from './loadingscreen.js';
 import mercurytexture from "../mercury-texture.jpg";
 import venustexture from "../venus-texture.jpg";
+import marstexture from "../mars-texture.jpg";
+import jupitertexture from "../jupiter-texture.jpg";
+import saturntexture from "../saturn-texture.jpg";
+import saturnringstexture from "../saturn-rings-texture.png";
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 // Scene
 const scene = new THREE.Scene();
@@ -74,7 +78,7 @@ function getStarField({ numStars = 500, innerRadius = 1, outerRadius = 700 } = {
     return new THREE.Points(geometry, material);
 }
 
-const stars = getStarField({ numStars: 4000, innerRadius: 50, outerRadius: 150 });
+const stars = getStarField({ numStars: 3000, innerRadius: 90, outerRadius: 150 });
 scene.add(stars);
 
 
@@ -84,6 +88,7 @@ const earthGroup = new THREE.Group();
 const earthGeometry = new THREE.SphereGeometry(8, 64, 64);
 const earthMaterial = new THREE.MeshPhongMaterial({
     map: textureLoader.load(earthTexture),
+    alphaTest: true
 });
 const earthMesh = new THREE.Mesh(earthGeometry, earthMaterial);
 
@@ -99,6 +104,9 @@ scene.add(cloudsMesh);
 
 earthGroup.rotation.z = -23.4 * Math.PI / 180;
 earthGroup.rotation.y -= 2.1;
+const originalScale = 8;
+const targetScale = 3;
+const scaleFactor = targetScale / originalScale;
 earthGroup.add(earthMesh);
 scene.add(earthGroup);
 
@@ -118,13 +126,15 @@ moonMesh.rotation.y += 4;
 //Sun geometry
 
 const sunGeometry = new THREE.SphereGeometry(10, 64, 64);
-const sunlight = new THREE.PointLight(0xffffff, 500);
+const sunlight = new THREE.PointLight(0xffffff, 1000, 0, 2);
 sunlight.add(new THREE.Mesh(sunGeometry, new THREE.MeshBasicMaterial({
-    map: textureLoader.load(sunTexture)
+    map: textureLoader.load(sunTexture),
+    color: 0xcccccc
 })));
-
+sunlight.castShadow = true;
 sunlight.position.set(0, 0, -50);
-
+scene.add(sunlight);
+   
 
 //Mercury geometry
 const mercuryGeometry = new THREE.SphereGeometry(1, 64, 64);
@@ -134,6 +144,8 @@ const mercuryMaterial = new THREE.MeshPhongMaterial({
 const mercuryMesh = new THREE.Mesh(mercuryGeometry, mercuryMaterial);
 
 mercuryMesh.position.set(15, 0, -50);
+scene.add(mercuryMesh);
+
 
 
 //Venus geometry
@@ -144,6 +156,57 @@ const venusMaterial = new THREE.MeshPhongMaterial({
 const venusMesh = new THREE.Mesh(venusGeometry, venusMaterial);
 
 venusMesh.position.set(20, -2, -40);
+scene.add(venusMesh);
+
+
+//Mars geometry
+const marsGeometry = new THREE.SphereGeometry(2.5, 64, 64);
+const marsMaterial = new THREE.MeshPhongMaterial({
+    map: textureLoader.load(marstexture)
+})
+const marsMesh = new THREE.Mesh(marsGeometry, marsMaterial);
+marsMesh.position.set(33, 0, -50);
+scene.add(marsMesh);
+
+
+//jupiter geometry
+const jupiterGeometry = new THREE.SphereGeometry(6, 64, 64);
+const jupiterMaterial = new THREE.MeshPhongMaterial({
+    map: textureLoader.load(jupitertexture)
+});
+const jupiterMesh = new THREE.Mesh(jupiterGeometry, jupiterMaterial);
+jupiterMesh.position.set(-50, 2, -65);
+scene.add(jupiterMesh); 
+
+
+//saturn geometry
+const saturnGeometry = new THREE.SphereGeometry(6, 64, 64);
+const saturnMaterial = new THREE.MeshPhongMaterial({
+    map: textureLoader.load(saturntexture)
+});
+const saturnMesh = new THREE.Mesh(saturnGeometry, saturnMaterial);
+saturnMesh.position.set(0, -10, -50);
+saturnMesh.castShadow = true;
+scene.add(saturnMesh);
+
+const saturnRingsGeometry = new THREE.RingGeometry(7, 10, 32);
+const texture = textureLoader.load(saturnringstexture, function(tex){
+    tex.wrapS = THREE.RepeatWrapping;
+    tex.wrapT = THREE.RepeatWrapping;
+    tex.repeat.set(0.6, 0.6);
+    tex.rotation = Math.PI / 4;
+});
+
+const saturnRingsMaterial = new THREE.MeshPhongMaterial({
+    map: texture,
+    side: THREE.DoubleSide
+});
+const saturnRingsMesh = new THREE.Mesh(saturnRingsGeometry, saturnRingsMaterial);
+saturnRingsMesh.position.copy(saturnMesh.position);
+saturnRingsMesh.rotation.x += 14;
+saturnRingsMesh.receiveShadow = true;
+scene.add(saturnRingsMesh);
+
 
 // Light
 const ambientLight = new THREE.AmbientLight(0xffffff, 0.013);
@@ -154,15 +217,23 @@ directionalLight.intensity = 1;
 scene.add(directionalLight);
 
 
-const moonOrbitRadius = 11;
+let moonOrbitRadius = 11;
 const moonOrbitSpeed = 0.004;
 let moonAngle = 0;
-const mercuryOrbitRadius = 15;
+const mercuryOrbitRadius = 13;
 const mercuryOrbitSpeed = 0.008;
 let mercuryAngle = 0;
-const venusOrbitRadius = 20;
+const venusOrbitRadius = 16;
 const venusOrbitSpeed = 0.003;
 let venusAngle = 0;
+const marsOrbitRadius = 33;
+let marsAngle = 0;
+const jupiterorbitRadius = 40;
+const jupiterOrbitSpeed = 0.001;
+let jupiterAngle = 0;
+const saturnOrbitRadius = 50;
+const saturnOrbitSpeed = 0.0007;
+let saturnAngle = 0;
 
 //Render function
 function animate(){
@@ -171,6 +242,10 @@ function animate(){
     cloudsMesh.rotation.y += 0.0004; 
     sunlight.rotation.y += 0.0005;
     mercuryMesh.rotation.y += 0.0004;
+    venusMesh.rotation.y += 0.0004;
+    marsMesh.rotation.y += 0.0005;
+    jupiterMesh.rotation.y += 0.002;
+    saturnMesh.rotation.y += 0.0008;
 
     //moon movement
     moonAngle += moonOrbitSpeed;
@@ -189,6 +264,25 @@ function animate(){
     venusMesh.position.x = sunlight.position.x + venusOrbitRadius * Math.sin(venusAngle);
     venusMesh.position.z = sunlight.position.z + venusOrbitRadius * Math.cos(venusAngle);
     venusMesh.position.y = sunlight.position.y + venusOrbitRadius * Math.sin(venusAngle);
+
+    //mars movement
+    marsAngle += venusOrbitSpeed;
+    marsMesh.position.x = sunlight.position.x + marsOrbitRadius * Math.sin(marsAngle);
+    marsMesh.position.z = sunlight.position.z + marsOrbitRadius * Math.cos(marsAngle);
+
+    //jupiter movement
+    jupiterAngle += jupiterOrbitSpeed;
+    jupiterMesh.position.x = sunlight.position.x + jupiterorbitRadius * Math.cos(jupiterAngle);
+    jupiterMesh.position.y = sunlight.position.y + jupiterorbitRadius * Math.sin(jupiterAngle);
+
+    //saturn movement
+    saturnAngle += saturnOrbitSpeed;
+    saturnMesh.position.x = sunlight.position.x + saturnOrbitRadius * Math.sin(saturnAngle);
+    saturnMesh.position.z = sunlight.position.z + saturnOrbitRadius * Math.cos(saturnAngle);
+    saturnMesh.position.y = sunlight.position.y + saturnOrbitRadius * Math.cos(saturnAngle);
+    saturnRingsMesh.position.x = sunlight.position.x + saturnOrbitRadius * Math.sin(saturnAngle);
+    saturnRingsMesh.position.z = sunlight.position.z + saturnOrbitRadius * Math.cos(saturnAngle);
+    saturnRingsMesh.position.y = sunlight.position.y + saturnOrbitRadius * Math.cos(saturnAngle);
 }
 
 if(window.innerWidth < 1200){
@@ -232,35 +326,53 @@ tl.fromTo([earthGroup.position, cloudsMesh.position], {z: 0, x: 0, y: -15}, {z: 
 function exploreAnimation() {
 
     if(window.innerWidth < 1200){
-        if(camera.position.z <= 25 && camera.position.y <= 0){
+        if(camera.position.z >= 65){
             return;
         }
     }else{
-        if(camera.position.z <= 15 && camera.position.y <= 0){
+        if(camera.position.z >= 50){
             return;
         }
     }
 
     requestAnimationFrame(exploreAnimation);
-    camera.position.z -= 0.1;
-    camera.position.y -= 0.05;
-    earthGroup.position.y -= 0.2;
-    cloudsMesh.position.y -= 0.2;
+    camera.position.z += 0.1; 
 
+    renderer.render(scene, camera);
+}
+
+let earthAngle = 0;
+
+function earthOrbiting(){
+    requestAnimationFrame(earthOrbiting);
+    const earthOrbitRadius = 22;
+    const earthOrbitSpeed = 0.002;
+    
+
+    earthAngle -= earthOrbitSpeed;
+    earthGroup.position.x = sunlight.position.x + earthOrbitRadius * Math.cos(earthAngle);
+    earthGroup.position.z = sunlight.position.z + earthOrbitRadius * Math.sin(earthAngle);
+    earthGroup.position.y = sunlight.position.y + earthOrbitRadius * Math.sin(earthAngle);
+    cloudsMesh.position.x = sunlight.position.x + earthOrbitRadius * Math.cos(earthAngle);
+    cloudsMesh.position.z = sunlight.position.z + earthOrbitRadius * Math.sin(earthAngle);
+    cloudsMesh.position.y = sunlight.position.y + earthOrbitRadius * Math.sin(earthAngle);
     renderer.render(scene, camera);
 }
 
 const explore = document.querySelector(".explore-button")
 explore.addEventListener('click', function() {
-    exploreAnimation();
-    scene.add(sunlight);
-    scene.add(mercuryMesh);
-    scene.add(venusMesh);
-    
     const controls = new OrbitControls( camera, renderer.domElement );
     controls.enableZoom = false;
+    tl.fromTo('.home-content', {y: "0%"}, {y: "-200%", duration: 2});
+    controls.update();
     
-    tl.fromTo('.home-content', {y: "0%"}, {y: "-200%"})
-      .fromTo(directionalLight, {intensity: 1}, {intensity: 0, duration: 2});
-      controls.update();
+    ambientLight.intensity = 0.02;
+    moonOrbitRadius = 4;
+    tl.fromTo(earthMesh.scale, {x: 1, y: 1, z: 1}, {x: scaleFactor, y: scaleFactor, z: scaleFactor}, "<")
+        .fromTo(cloudsMesh.scale, {x: 1, y: 1, z: 1}, {x: 0.38, y: 0.38, z: 0.38}, "<")
+        .fromTo(moonMesh.scale, {x: 1, y: 1, z: 1}, {x: 0.34, y: 0.34, z: 0.34}, "<")
+        .fromTo(directionalLight, {intensity: 1}, {intensity: 0, duration: 0.3}, "<")
+        .fromTo([earthGroup.position, cloudsMesh.position], {x: 0, y: 0, z: 0}, {x: -5, y: 20, z: -30}, "<");
+    exploreAnimation();
+    earthOrbiting();
 });
