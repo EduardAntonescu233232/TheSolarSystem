@@ -13,7 +13,11 @@ import marstexture from "../mars-texture.jpg";
 import jupitertexture from "../jupiter-texture.jpg";
 import saturntexture from "../saturn-texture.jpg";
 import saturnringstexture from "../saturn-rings-texture.png";
+import uranustexture from "../uranus-texture.jpg";
+import neptunetexture from "../neptune-texture.jpg";
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { MotionPathPlugin } from 'gsap/all';
+gsap.registerPlugin(MotionPathPlugin);
 // Scene
 const scene = new THREE.Scene();
 const earthSizes = {
@@ -78,8 +82,9 @@ function getStarField({ numStars = 500, innerRadius = 1, outerRadius = 700 } = {
     return new THREE.Points(geometry, material);
 }
 
-const stars = getStarField({ numStars: 3000, innerRadius: 90, outerRadius: 150 });
+const stars = getStarField({ numStars: 3000, innerRadius: 130, outerRadius: 200 });
 scene.add(stars);
+
 
 
 
@@ -99,6 +104,8 @@ const cloudsEarthMaterial = new THREE.MeshStandardMaterial({
 })
 const cloudsMesh = new THREE.Mesh(earthGeometry, cloudsEarthMaterial);
 cloudsMesh.scale.setScalar(1.003);
+earthGroup.position.set(0, 0, 20);
+cloudsMesh.position.set(0, 0, 20);
 scene.add(cloudsMesh);
 
 
@@ -107,6 +114,7 @@ earthGroup.rotation.y -= 2.1;
 const originalScale = 8;
 const targetScale = 3;
 const scaleFactor = targetScale / originalScale;
+earthMesh.receiveShadow = true;
 earthGroup.add(earthMesh);
 scene.add(earthGroup);
 
@@ -117,6 +125,7 @@ const moonMaterial = new THREE.MeshPhongMaterial({
 });
 
 const moonMesh = new THREE.Mesh(moonGeometry, moonMaterial);
+moonMesh.castShadow = true;
 scene.add(moonMesh);
 
 moonMesh.position.set(2, 0 ,2);
@@ -129,21 +138,24 @@ const sunGeometry = new THREE.SphereGeometry(10, 64, 64);
 const sunlight = new THREE.PointLight(0xffffff, 1000, 0, 2);
 sunlight.add(new THREE.Mesh(sunGeometry, new THREE.MeshBasicMaterial({
     map: textureLoader.load(sunTexture),
-    color: 0xcccccc
+    color: 0xcccccc,
 })));
 sunlight.castShadow = true;
-sunlight.position.set(0, 0, -50);
-scene.add(sunlight);
+sunlight.position.set(0, -50, -60);
+
    
 
 //Mercury geometry
 const mercuryGeometry = new THREE.SphereGeometry(1, 64, 64);
 const mercuryMaterial = new THREE.MeshPhongMaterial({
     map: textureLoader.load(mercurytexture),
-})
+});
+mercuryMaterial.needsUpdate = true;
 const mercuryMesh = new THREE.Mesh(mercuryGeometry, mercuryMaterial);
 
 mercuryMesh.position.set(15, 0, -50);
+mercuryMaterial.transparent = true;
+mercuryMaterial.opacity = 0;
 scene.add(mercuryMesh);
 
 
@@ -156,7 +168,10 @@ const venusMaterial = new THREE.MeshPhongMaterial({
 const venusMesh = new THREE.Mesh(venusGeometry, venusMaterial);
 
 venusMesh.position.set(20, -2, -40);
+venusMaterial.transparent = true;
+venusMaterial.opacity = 0;
 scene.add(venusMesh);
+
 
 
 //Mars geometry
@@ -166,6 +181,8 @@ const marsMaterial = new THREE.MeshPhongMaterial({
 })
 const marsMesh = new THREE.Mesh(marsGeometry, marsMaterial);
 marsMesh.position.set(33, 0, -50);
+marsMaterial.transparent = true;
+marsMaterial.opacity = 0;
 scene.add(marsMesh);
 
 
@@ -176,7 +193,10 @@ const jupiterMaterial = new THREE.MeshPhongMaterial({
 });
 const jupiterMesh = new THREE.Mesh(jupiterGeometry, jupiterMaterial);
 jupiterMesh.position.set(-50, 2, -65);
+jupiterMaterial.transparent = true;
+jupiterMaterial.opacity = 0;
 scene.add(jupiterMesh); 
+
 
 
 //saturn geometry
@@ -187,9 +207,11 @@ const saturnMaterial = new THREE.MeshPhongMaterial({
 const saturnMesh = new THREE.Mesh(saturnGeometry, saturnMaterial);
 saturnMesh.position.set(0, -10, -50);
 saturnMesh.castShadow = true;
+saturnMaterial.transparent = true;
+saturnMaterial.opacity = 0;
 scene.add(saturnMesh);
 
-const saturnRingsGeometry = new THREE.RingGeometry(7, 10, 32);
+const saturnRingsGeometry = new THREE.RingGeometry(7, 10, 64);
 const texture = textureLoader.load(saturnringstexture, function(tex){
     tex.wrapS = THREE.RepeatWrapping;
     tex.wrapT = THREE.RepeatWrapping;
@@ -205,7 +227,33 @@ const saturnRingsMesh = new THREE.Mesh(saturnRingsGeometry, saturnRingsMaterial)
 saturnRingsMesh.position.copy(saturnMesh.position);
 saturnRingsMesh.rotation.x += 14;
 saturnRingsMesh.receiveShadow = true;
+saturnRingsMaterial.transparent = true;
+saturnRingsMaterial.opacity = 0;
 scene.add(saturnRingsMesh);
+
+
+//uranus geometry
+const uranusGeometry = new THREE.SphereGeometry(4, 64, 64);
+const uranusMaterial = new THREE.MeshPhongMaterial({
+    map: textureLoader.load(uranustexture)
+});
+const uranusMesh = new THREE.Mesh(uranusGeometry, uranusMaterial);
+uranusMesh.position.set(-20, 0, -10);
+uranusMaterial.transparent = true;
+uranusMaterial.opacity = 0;
+scene.add(uranusMesh);
+
+
+//neptune geometry
+const neptuneGeometry = new THREE.SphereGeometry(4, 64, 64);
+const neptuneMaterial = new THREE.MeshPhongMaterial({
+    map: textureLoader.load(neptunetexture)
+});
+const neptuneMesh = new THREE.Mesh(neptuneGeometry, neptuneMaterial);
+neptuneMesh.position.set(-60, 0, -60);
+neptuneMaterial.transparent = true;
+neptuneMaterial.opacity = 0;
+scene.add(neptuneMesh);
 
 
 // Light
@@ -219,21 +267,27 @@ scene.add(directionalLight);
 
 let moonOrbitRadius = 11;
 const moonOrbitSpeed = 0.004;
-let moonAngle = 0;
+let moonAngle = 0, mercuryAngle = 0, venusAngle = 0, marsAngle = 0, jupiterAngle = 0, saturnAngle = 0, uranusAngle = 0, neptuneAngle = 0;
 const mercuryOrbitRadius = 13;
 const mercuryOrbitSpeed = 0.008;
-let mercuryAngle = 0;
+
 const venusOrbitRadius = 16;
 const venusOrbitSpeed = 0.003;
-let venusAngle = 0;
+
 const marsOrbitRadius = 33;
-let marsAngle = 0;
+
 const jupiterorbitRadius = 40;
 const jupiterOrbitSpeed = 0.001;
-let jupiterAngle = 0;
+
 const saturnOrbitRadius = 50;
 const saturnOrbitSpeed = 0.0007;
-let saturnAngle = 0;
+
+const uranusOrbitRadius = 70;
+const uranusOrbitSpeed = 0.0007;
+
+const neptuneOrbitRadius = 80;
+const neptuneOrbitSpeed = 0.001;
+
 
 //Render function
 function animate(){
@@ -246,6 +300,7 @@ function animate(){
     marsMesh.rotation.y += 0.0005;
     jupiterMesh.rotation.y += 0.002;
     saturnMesh.rotation.y += 0.0008;
+    neptuneMesh.rotation.y += 0.002;
 
     //moon movement
     moonAngle += moonOrbitSpeed;
@@ -283,6 +338,36 @@ function animate(){
     saturnRingsMesh.position.x = sunlight.position.x + saturnOrbitRadius * Math.sin(saturnAngle);
     saturnRingsMesh.position.z = sunlight.position.z + saturnOrbitRadius * Math.cos(saturnAngle);
     saturnRingsMesh.position.y = sunlight.position.y + saturnOrbitRadius * Math.cos(saturnAngle);
+
+    //uranus movement
+    uranusAngle += uranusOrbitSpeed;
+    uranusMesh.position.x = sunlight.position.x + uranusOrbitRadius * Math.sin(uranusAngle);
+    uranusMesh.position.z = sunlight.position.z + uranusOrbitRadius * Math.cos(uranusAngle);
+
+    //neptune movement
+    neptuneAngle += neptuneOrbitSpeed;
+    neptuneMesh.position.x = sunlight.position.x + neptuneOrbitRadius * Math.sin(neptuneAngle);
+    neptuneMesh.position.z = sunlight.position.z + neptuneOrbitRadius * Math.cos(neptuneAngle);
+    neptuneMesh.position.y = sunlight.position.y + neptuneOrbitRadius * Math.cos(neptuneAngle);
+}
+
+const raycaster = new THREE.Raycaster();
+const mouse = new THREE.Vector2();
+
+function planetClicked(event){
+    mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+    mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+
+    raycaster.setFromCamera(mouse, camera);
+
+    const intersects = raycaster.intersectObjects(scene.children, true);
+
+    for(let i = 0; i< intersects.length; i++){
+        if(intersects[i].object.parent === earthGroup){
+            console.log("yeeeey");
+            break;
+        }
+    }
 }
 
 if(window.innerWidth < 1200){
@@ -292,8 +377,11 @@ else{
     camera.position.set(0, 6, 30);
     camera.fov = 50;
 }
+
+
 animate();
 
+window.addEventListener('click', planetClicked);
 
 //Resizing
 
@@ -361,18 +449,50 @@ function earthOrbiting(){
 
 const explore = document.querySelector(".explore-button")
 explore.addEventListener('click', function() {
+    scene.add(sunlight);
     const controls = new OrbitControls( camera, renderer.domElement );
-    controls.enableZoom = false;
-    tl.fromTo('.home-content', {y: "0%"}, {y: "-200%", duration: 2});
+    controls.minDistance = 3;
+    controls.maxDistance = 70;
+    controls.enablePan = false;
+    tl.fromTo('.home-content', {y: "0%"}, {y: "-200%"});
     controls.update();
     
     ambientLight.intensity = 0.02;
     moonOrbitRadius = 4;
+    const materials = [mercuryMaterial, venusMaterial, marsMaterial, jupiterMaterial, saturnMaterial, saturnRingsMaterial, uranusMaterial, neptuneMaterial];
+        materials.forEach(material => {
+            tl.fromTo(material, { opacity: 0 }, { opacity: 1 }, "<");
+        });
+
     tl.fromTo(earthMesh.scale, {x: 1, y: 1, z: 1}, {x: scaleFactor, y: scaleFactor, z: scaleFactor}, "<")
         .fromTo(cloudsMesh.scale, {x: 1, y: 1, z: 1}, {x: 0.38, y: 0.38, z: 0.38}, "<")
         .fromTo(moonMesh.scale, {x: 1, y: 1, z: 1}, {x: 0.34, y: 0.34, z: 0.34}, "<")
         .fromTo(directionalLight, {intensity: 1}, {intensity: 0, duration: 0.3}, "<")
-        .fromTo([earthGroup.position, cloudsMesh.position], {x: 0, y: 0, z: 0}, {x: -5, y: 20, z: -30}, "<");
+        .fromTo([earthGroup.position, cloudsMesh.position], {x: 0, y: 0, z: 0}, {x: -5, y: 20, z: -30}, "<")
+        .fromTo(sunlight.position, {x: 0, y: -50, z: -60}, {x: 0, y: 0, z: -60}, "<")
+        .fromTo('.back-button', {x: "-400%"}, {x: "0%"}, "<")
+        .to('.mouse-controls', {y: "0%"})
+        .add(() => {
+            gsap.to('.mouse-emoji', {
+                duration: 2,
+                ease: "none",
+                motionPath: {
+                    path: [
+                        {x: -15, y: 0},
+                        {x: 0, y: 15},
+                        {x: 15, y: 0},
+                        {x: 0, y: -15},
+                        {x:-15, y: 0}
+                    ],
+                    type: "circular",
+                    curviness: 2,
+                    autoRotate: false
+                }
+            });
+        })
+        .to('.mouse-controls', {y: "-300%", delay: 5});
+        
     exploreAnimation();
     earthOrbiting();
+
 });
