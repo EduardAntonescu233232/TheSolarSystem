@@ -5,8 +5,8 @@
         <meta name="viewport" content="width=device-width"/>
         <title> The Solar System</title>
         
-      <script type="module" crossorigin src="/TheSolarSystem/assets/index-0AurW5u_.js"></script>
-      <link rel="stylesheet" crossorigin href="/TheSolarSystem/assets/index-Xu2glQZT.css">
+      <script type="module" crossorigin src="/TheSolarSystem/assets/index-lQCnDXD-.js"></script>
+      <link rel="stylesheet" crossorigin href="/TheSolarSystem/assets/index-xDxz2sCi.css">
     </head>
     <body>
         <div id="loading-screen" >
@@ -24,7 +24,19 @@
             </div>
             <div class="navbar-ul">
                 <a href="#">Home</a>
-                <a href="#">Planets</a>
+                <div class="planets-link">
+                    <a href="#">Planets <span id="arrow"> > </span></a>
+                    <div class="planets-ul">
+                        <a href="#">Mercury</a>
+                        <a href="#">Venus</a>
+                        <a href="#">Earth</a>
+                        <a href="#">Mars</a>
+                        <a href="#">Jupiter</a>
+                        <a href="#">Saturn</a>
+                        <a href="#">Uranus</a>
+                        <a href="#">Neptune</a>
+                    </div>
+                </div>
                 <a href="#">About</a>
             </div>
         </div>
@@ -34,6 +46,14 @@
             <p class="overview-text">The Solar System is a vast and intricate system of celestial bodies, dominated by the Sun, a star that contains more than 99.8% of the Solar System's total mass. It consists of eight planets, which are, in order of their distance from the Sun: Mercury, Venus, Earth, Mars, Jupiter, Saturn, Uranus, and Neptune. These planets orbit the Sun due to its gravitational pull.</p>
             <button class="explore-button">Explore</button>
         </div>
+        <div class="mouse-controls">
+            <div class="look-around">
+                <p class="mouse-emoji">&#x1F5B1;&#xFE0F;</p>
+            <p class="mouse-text">Hold the Left Click Button to look around. </p>
+            </div>
+            <p class="p-mouse"> You can also zoom in-and-out, using the Scroll Wheel.</p>
+        </div>
+        <button class="back-button">⮨</button>
         <canvas class="home-canvas"></canvas>
         
     </body> 
